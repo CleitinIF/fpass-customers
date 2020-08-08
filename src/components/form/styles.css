@@ -1,0 +1,150 @@
+.form-container {
+  grid-area: form;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+
+
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  margin: 1.1rem 0;
+}
+
+.input-container:focus-within label {
+  color: #5985ff;
+}
+
+.input-container.error label {
+  color: red;
+}
+
+.buttons-header-container .button {
+  background-color: #e8e8e8;
+  border-radius: 3px;
+  margin-right: 1.2rem;
+  padding: 0.7rem;
+  
+  transition: background-color 300ms;
+}
+
+.buttons-header-container .button .material-icons {
+  color: #5985ff;
+
+  font-size: 2rem;
+}
+
+.buttons-header-container .button:hover {
+  background-color: #d1d1d1;
+}
+
+.form-container label {
+  font-size: 1.75rem;
+  color: #616161;
+
+  margin-bottom: 0.4rem;
+
+  transition: color 300ms;
+}
+
+.form-container input, 
+.form-container textarea {
+  border: 2px solid transparent;
+  outline: none;
+  background-color: #dedede;
+  color: #343434;
+
+  border-radius: 0.4rem;
+
+  padding: 1rem;
+  margin-bottom: 1.7rem;
+  font-size: 1.9rem;
+
+  transition: background 300ms;
+  resize: vertical;
+}
+
+.input-container.error input,
+.input-container.error textarea {
+  background-color: #ffd2cf;
+}
+
+.input-container.error input:hover,
+.input-container.error textarea:hover {
+  background-color: #ffb0ab;
+}
+
+.form-container textarea {
+  height: 10rem;
+}
+
+.form-container input:hover, 
+.form-container textarea:hover {
+  background-color: #cfcfcf;
+}
+
+.input-container.error input:focus,
+.input-container.error textarea:focus {
+  border: 2px solid #ffb0ab;
+  box-sizing: border-box;
+}
+
+.form-container input:focus, 
+.form-container textarea:focus {
+  border: 2px solid #5985ff;
+  box-sizing: border-box;
+}
+
+
+
+.input-container .error-label {
+  position: absolute;
+  bottom: 0;
+  left: 0.1rem;
+  
+  color: red;
+  
+  font-size: 1.43rem;
+}
+
+.buttons-footer-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+  width: 100%;
+}
+
+.buttons-footer-container button {
+  padding: 1rem 1.5rem;
+  font-size: 1.63rem;
+  border-radius: 6px;
+
+  transition: background-color 300ms;
+}
+
+.buttons-footer-container .submit-button {
+  background-color: #5985ff;
+  color: #e8e8e8;
+}
+
+.buttons-footer-container .reset-button {
+  margin-right: 1.3rem;
+
+  background-color: #e8e8e8;
+  color: #5985ff;
+}
+
+.buttons-footer-container .reset-button:hover {
+  background-color: #dedede;
+}
+
+.buttons-footer-container .submit-button:hover {
+  background-color: #3369ff;
+}

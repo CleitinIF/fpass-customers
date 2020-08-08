@@ -1,0 +1,8 @@
+.wrapper {
+  display: grid;
+  grid: "table table form" 1fr;
+
+  padding: 2rem;
+  /* width: 80vw; */
+  /* max-width: 1080px; */
+}
