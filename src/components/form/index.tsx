@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './styles.css';
+
 import useForm from '../../hooks/useForm';
-import { useDispatch } from 'react-redux';
-import { addCustomer } from '../../store/modules/customers/actions';
+import Customer from '../../types/Customer';
+import { addCustomer, alterCustomer } from '../../store/modules/customers/actions';
+import idGenerator from '../../utils/idGenerator';
+
 
 const Form: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { values, onSubmit, onChange, errors, setFieldValue, inputProps } = useForm({
-    initialValues: {
+  const customer = useSelector((state: any) => state.form) as Customer || null;
+
+  const { onSubmit, setValues, errors, setFieldValue, inputProps } = useForm({
+    initialValues: customer || {
       name: '',
       birthday: '',
       cellphone: '',
@@ -18,14 +24,23 @@ const Form: React.FC = () => {
       address: '',
       observation: ''
     },
-    onSubmit: (values) => {
-      dispatch(addCustomer(values));
-      console.log(values)
+    onSubmit: async (values) => {
+      if(values.id) {
+        dispatch(alterCustomer({
+          ...values
+        }));
+      } else {
+        const id = idGenerator();
+        dispatch(addCustomer({
+          ...values,
+          id: id
+        }));
+      }
     },
     schemaValidation: {
       name: (value: string) => {
         if(!value) return 'Campo obrigatório!';
-        if(value.match(/[^a-zA-Z 0-9]+/g)) {
+        if(value.match(/[^a-zA-Z \u00C0-\u00FF]+/i)) {
           return 'O nome não pode conter caracteres especiais!'
         }
       },
@@ -79,6 +94,12 @@ const Form: React.FC = () => {
       }
     }
   });
+
+  useEffect(() => {
+    if(customer) {
+      setValues(customer)
+    }
+  }, [customer])
 
   const changeFieldValue = (name: string, value: string) => {
     setFieldValue(name, value);

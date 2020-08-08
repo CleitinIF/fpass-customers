@@ -9,7 +9,9 @@ export default function customers(state = INITIAL_STATE, action: SchedulingActio
   return produce(state, (draft) => {
     switch (action.type) {
       case ADD_CUSTOMER: {
-        draft.push(action.payload);
+        draft.push(
+          action.payload,
+        );
         break;
       }
       case REMOVE_CUSTOMER: {

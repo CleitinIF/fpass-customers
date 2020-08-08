@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Customer from '../types/Customer';
 
 interface useFormProps {
   onSubmit(values: any): any;
@@ -9,12 +10,19 @@ interface useFormProps {
 }
 
 const useForm = ({onSubmit, initialValues = {}, schemaValidation}: useFormProps) => {
+  const [prevInitialValues, setPrevInitialValues] = useState(initialValues);
   const [values, setValues] = useState<{
     [index: string]: string | undefined
   }>(initialValues as any);
   const [errors, setErrors] = useState<{
     [index: string]: string | null
   }>({});
+
+  useEffect(() => {
+    // if(!isEqual(initialValues, prevInitialValues)) {
+    //   setPrevInitialValues(initialValues)
+    // }
+  }, [initialValues, prevInitialValues])
 
   const handleSubmit = (event: any) => {
     if(event) event.preventDefault()
@@ -43,6 +51,20 @@ const useForm = ({onSubmit, initialValues = {}, schemaValidation}: useFormProps)
     }))
   };
 
+  const setFormValues = (values: Customer) => {
+    setValues({
+      id: values.id,
+      name: values.name,
+      observation: values.observation,
+      email: values.email,
+      document: values.document,
+      address: values.address,
+      birthday: values.birthday,
+      cellphone: values.cellphone
+    })
+    setErrors({});
+  }
+
   const inputProps = (name: string) => {
     return {
       onChange: handleChange,
@@ -56,7 +78,8 @@ const useForm = ({onSubmit, initialValues = {}, schemaValidation}: useFormProps)
     values,
     errors,
     setFieldValue,
-    inputProps
+    inputProps,
+    setValues: setFormValues
   }
 }
 

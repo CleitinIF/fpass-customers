@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import './styles.css';
-import { useSelector } from 'react-redux';
+
+import Customer from '../../types/Customer';
+import { setCustomer } from '../../store/modules/form/action';
 
 const Table: React.FC = () => {
   const customers = useSelector((state: any) => state.customers);
+  const dispatch = useDispatch();
 
-  console.log(customers)
+  const [searchValue, setSearchValue] = useState('');
+
+  const timer = useRef(null) as any;
+
+  const handleRowClick = (customer: Customer) => {
+    dispatch(setCustomer(customer))
+  }
+
+  const searchCustomers = () => {
+  }
+
+  const handleSearchInput = (event: any) => {
+    setSearchValue(event.currentTarget.value)
+
+    clearTimeout(timer.current);
+    timer.current = setTimeout(searchCustomers, 350)
+  }
 
   return (
     <div className="table-container">
       <div className="search-container">
-        <input name="birthday maxWidth" placeholder="Pesquisar" />
+        <input autoComplete="off" value={searchValue} onChange={handleSearchInput} name="birthday" placeholder="Pesquisar" />
         <span className="material-icons input-suffix">
           close
         </span>
@@ -26,18 +46,14 @@ const Table: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Nome</td>
-            <td>Data de nascimento</td>
-            <td>CPF</td>
-            <td>Celular</td>
-          </tr>
-          <tr>
-            <td>Nome</td>
-            <td>Data de nascimento</td>
-            <td>CPF</td>
-            <td>Celular</td>
-          </tr>
+          {customers.map((customer: Customer) => (
+            <tr key={customer.id} onClick={() => handleRowClick(customer)}>
+              <td>{customer.name}</td>
+              <td>{customer.birthday}</td>
+              <td>{customer.document}</td>
+              <td>{customer.cellphone}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
