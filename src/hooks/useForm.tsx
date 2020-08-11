@@ -24,9 +24,48 @@ const useForm = ({onSubmit, initialValues = {}, schemaValidation}: useFormProps)
     // }
   }, [initialValues, prevInitialValues])
 
+  const resetForm = () => {
+    setValues({
+      id: "",
+      name: "",
+      observation: "",
+      email: "",
+      document: "",
+      address: "",
+      birthday: "",
+      cellphone: ""
+    })
+  }
+
   const handleSubmit = (event: any) => {
     if(event) event.preventDefault()
-    onSubmit(values);
+
+    try {
+      validate();
+      onSubmit(values);
+    } catch (error) {
+      
+    }
+  }
+
+  const validate = () => {
+    let hasError = false;
+
+    Object.keys(schemaValidation).forEach(key => {
+      const value = values[key] as string; 
+      const error = schemaValidation[key](value);
+
+      if(error) {
+        if(!hasError) hasError = true
+        setErrors(prev => ({
+          ...prev,
+          [key]: error
+        }))
+      }
+    })
+
+    if(hasError)
+      throw new Error("Erro de validação")
   }
 
   const handleChange = (event: any) => {
@@ -79,7 +118,8 @@ const useForm = ({onSubmit, initialValues = {}, schemaValidation}: useFormProps)
     errors,
     setFieldValue,
     inputProps,
-    setValues: setFormValues
+    setValues: setFormValues,
+    resetForm
   }
 }
 

@@ -5,18 +5,18 @@ import './styles.css';
 
 import useForm from '../../hooks/useForm';
 import Customer from '../../types/Customer';
-import { addCustomer, alterCustomer, showCustomers } from '../../store/modules/customers/actions';
+import { addCustomer, alterCustomer, showCustomers, removeCustomer } from '../../store/modules/customers/actions';
 import idGenerator from '../../utils/idGenerator';
 
 
 const Form: React.FC = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   
   const dispatch = useDispatch();
 
   const customer = useSelector((state: any) => state.form) as Customer || null;
 
-  const { onSubmit, setValues, errors, setFieldValue, inputProps } = useForm({
+  const { onSubmit, setValues, errors, setFieldValue, inputProps, resetForm } = useForm({
     initialValues: customer || {
       name: '',
       birthday: '',
@@ -42,25 +42,26 @@ const Form: React.FC = () => {
       }
 
       setTimeout(() => {
-        dispatch(showCustomers())
+        dispatch(showCustomers());
         setLoading(false);
+        resetForm();
       }, 1000)
     },
     schemaValidation: {
-      name: (value: string) => {
+      name: (value?: string) => {
         if(!value) return 'Campo obrigatório!';
         if(value.match(/[^a-zA-Z \u00C0-\u00FF]+/i)) {
           return 'O nome não pode conter caracteres especiais!'
         }
       },
-      birthday: (value: string) => {
+      birthday: (value?: string) => {
         if(!value) return 'Campo obrigatório!';
 
-        if(!value.match(/[0-9]{2}\/[0-9]{2}\/[0-9]{4}/i)) {
+        if(!value.match(/[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/i)) {
           return 'Insira uma data válida!'
         }
       },
-      cellphone: (value: string) => {
+      cellphone: (value?: string) => {
         if(!value) return 'Campo obrigatório!';
 
         let maskedValue = value.replace(/\D/g, '');
@@ -74,7 +75,7 @@ const Form: React.FC = () => {
           return 'Insira um número válido!'
         }
       },
-      document: (value: string) => {
+      document: (value?: string) => {
         if(!value) return 'Campo obrigatório!';
 
         let maskedValue = value.replace(/\D/g, '');
@@ -88,18 +89,18 @@ const Form: React.FC = () => {
           return 'Documento inválido!'
         }
       },
-      email: (value: string) => {
+      email: (value?: string) => {
         if(!value) return 'Campo obrigatório!';
 
         if(!value.match(/^[a-z0-9.]+@[a-z0-9]+[a-z0-9.]+/i)) {
           return 'Email inválido!'
         }
       },
-      address: (value: string) => {
+      address: (value?: string) => {
         if(!value) return 'Campo obrigatório!'
       },
-      observation: (value: string) => {
-        if(value.length > 300) return 'Máximo de 300 caracteres!'
+      observation: (value?: string) => {
+        if(value && value.length > 300) return 'Máximo de 300 caracteres!'
       }
     }
   });
@@ -110,19 +111,16 @@ const Form: React.FC = () => {
     }
   }, [customer])
 
-  const changeFieldValue = (name: string, value: string) => {
-    setFieldValue(name, value);
+  const handleDelete = () => {
+    if(customer.id) {
+      dispatch(removeCustomer(customer.id))
+    }
   }
 
   return (
     <form className="form-container" onSubmit={onSubmit} autoComplete="off">
       <div className="buttons-header-container">
-        <button className="button">
-          <span className="material-icons">
-            add
-          </span>
-        </button>
-        <button className="button">
+        <button className="button" onClick={handleDelete}>
           <span className="material-icons">
             delete
           </span>

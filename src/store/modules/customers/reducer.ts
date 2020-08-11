@@ -39,6 +39,7 @@ export default function customers(state = INITIAL_STATE, action: CustomerActions
         const items = (page * 5);
 
         draft.show = draft.total.slice(items-5, items || 5);
+        draft.page = page;
         break;
       }
     }
