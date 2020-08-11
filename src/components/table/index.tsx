@@ -5,9 +5,10 @@ import './styles.css';
 
 import Customer from '../../types/Customer';
 import { setCustomer } from '../../store/modules/form/action';
+import { showCustomers } from '../../store/modules/customers/actions';
 
 const Table: React.FC = () => {
-  const customers = useSelector((state: any) => state.customers);
+  const customers = useSelector((state: any) => state.customers.show);
   const dispatch = useDispatch();
 
   const [searchValue, setSearchValue] = useState('');
@@ -19,6 +20,7 @@ const Table: React.FC = () => {
   }
 
   const searchCustomers = () => {
+    dispatch(showCustomers({page: 1}))
   }
 
   const handleSearchInput = (event: any) => {
@@ -27,6 +29,8 @@ const Table: React.FC = () => {
     clearTimeout(timer.current);
     timer.current = setTimeout(searchCustomers, 350)
   }
+
+  console.log(customers.length)
 
   return (
     <div className="table-container">

@@ -28,8 +28,18 @@ export interface RemoveCustomer {
   payload: string;
 }
 
-export type SchedulingActionsType = 
+export const SHOW_CUSTOMERS = '@customers/show_customers';
+export interface ShowCustomersPayload {
+  page: number
+}
+export interface ShowCustomers {
+  type: typeof SHOW_CUSTOMERS;
+  payload?: ShowCustomersPayload;
+}
+
+export type CustomerActionsType = 
   RequestCustomers | 
   AddCustomer | 
   AlterCustomer | 
-  RemoveCustomer
+  RemoveCustomer |
+  ShowCustomers;

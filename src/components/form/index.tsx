@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './styles.css';
 
 import useForm from '../../hooks/useForm';
 import Customer from '../../types/Customer';
-import { addCustomer, alterCustomer } from '../../store/modules/customers/actions';
+import { addCustomer, alterCustomer, showCustomers } from '../../store/modules/customers/actions';
 import idGenerator from '../../utils/idGenerator';
 
 
 const Form: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+  
   const dispatch = useDispatch();
 
   const customer = useSelector((state: any) => state.form) as Customer || null;
@@ -24,7 +26,9 @@ const Form: React.FC = () => {
       address: '',
       observation: ''
     },
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
+      setLoading(true);
+
       if(values.id) {
         dispatch(alterCustomer({
           ...values
@@ -36,6 +40,11 @@ const Form: React.FC = () => {
           id: id
         }));
       }
+
+      setTimeout(() => {
+        dispatch(showCustomers())
+        setLoading(false);
+      }, 1000)
     },
     schemaValidation: {
       name: (value: string) => {
@@ -156,7 +165,10 @@ const Form: React.FC = () => {
       </div>
       <div className="buttons-footer-container">
         <button className="reset-button">Cancelar</button>
-        <button className="submit-button" type="submit">Enviar</button>
+        <button className="submit-button" type="submit">
+          Enviar
+          {loading && <div id="loading"></div>}
+        </button>
       </div>
     </form>
   );

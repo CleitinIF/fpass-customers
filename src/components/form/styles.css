@@ -1,8 +1,15 @@
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .form-container {
   grid-area: form;
   padding-right: 1rem;
   padding-bottom: 1rem;
 
+  position: relative;
 
   max-height: 100vh;
   overflow-y: scroll;
@@ -132,6 +139,9 @@
 .buttons-footer-container .submit-button {
   background-color: #5985ff;
   color: #e8e8e8;
+
+  display: flex;
+  flex-direction: row;
 }
 
 .buttons-footer-container .reset-button {
@@ -147,4 +157,14 @@
 
 .buttons-footer-container .submit-button:hover {
   background-color: #3369ff;
+}
+
+#loading {
+  width: 12px;
+  height: 12px;
+  margin-left: 1rem;
+  border: 2px solid rgba(0,0,0, 0.1);
+  border-top-color: #3369ff;
+  border-radius: 100%;
+  animation: spin 1s linear infinite;
 }
